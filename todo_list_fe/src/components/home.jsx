@@ -1,4 +1,5 @@
 import { useState } from "react"
+import Tabs from "./tabs"
 
 function Home() {
 
@@ -31,15 +32,8 @@ function Home() {
 
   return(
     <div className="bg-gray-200 mx-auto md:w-2xl p-5 rounded-2xl">
-      
-      <div className="flex justify-center p-3">
-        <ul className="flex bg-white rounded-lg">
-          <li className="text-lg p-4 rounded-md">All Tasks</li>
-          <li className="text-lg p-4 rounded-md">Today</li>
-          {/* <li>Pending</li> */}
-          <li className="text-lg p-4">Overdue</li>
-        </ul>
-      </div>
+  
+      <Tabs />
 
       <div>
         <div className="flex justify-between mt-3 mb-5 items-center">
