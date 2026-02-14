@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Tabs from "./tabs"
+import Header from "./header"
 
 function Home() {
 
@@ -31,6 +32,9 @@ function Home() {
 
 
   return(
+    <>
+    <Header />
+    
     <div className="bg-gray-200 mx-auto md:w-2xl p-5 rounded-2xl">
   
       <Tabs />
@@ -72,7 +76,7 @@ function Home() {
                       setTodos(prev => prev.map(t => t.id === todo.id ? {...t, completed: !t.completed} : t ))
                     }}
                   />
-                  <div style={{textDecoration: todo.completed ? 'line-through' : 'none'}} className="wrap-break-word max-w-90 ">
+                  <div style={{textDecoration: todo.completed ? 'line-through' : 'none'}} className="wrap-break-word max-w-72 md:max-w-70 pb-1">
                     {todo.edit ? 
                       <div>
                         <input 
@@ -112,6 +116,7 @@ function Home() {
       
       
     </div>
+    </>
   )
 }
 
