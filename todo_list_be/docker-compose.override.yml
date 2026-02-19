@@ -1,0 +1,28 @@
+services:
+  db:
+    ports:
+      - '3306:3306'
+
+  django:
+    command: >
+      sh -c "
+        echo 'Waiting for DB...' &&
+        while ! nc -z db 3306; do
+          echo 'DB unavailable - sleeping' &&
+          sleep 1
+        done &&
+        echo 'DB is ready' &&
+        python manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+      - .:/app
+    ports:
+      - '8000:8000'
+
+  adminer:
+    image: adminer
+    container_name: todo_adminer
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
