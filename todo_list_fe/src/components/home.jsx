@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react"
-import Tabs from "./tabs"
-import Header from "./header"
 import { fetchWithAuth } from "./refresh"
 
 function Home() {
 
   const [taskInput, setTaskInput] = useState(false)
   const [taskText, setTaskText] = useState('')
-  const [todos, setTodos] = useState([])
+  const [tasks, setTasks] = useState([])
   const [editText, setEditText] = useState('')
   const addTask = () => {
     setTaskInput(true)
@@ -21,6 +19,7 @@ function Home() {
         return;
       }
       const tasks = await response.json()
+      setTasks(tasks)
       console.log(tasks)
     } catch(err) {
       console.error(err)
@@ -49,9 +48,6 @@ function Home() {
       }
       fetchTask()
       console.log(response)
-      // const data = await response.json();
-      // setTodos([...todos, data]);
-      // setTaskText('');
     } catch(err) {
       console.error(err)
     }
@@ -70,13 +66,8 @@ function Home() {
 
   return(
     <>
-    <Header />
-    
-    <div className="bg-gray-200 mx-auto md:w-2xl p-5 rounded-2xl">
-  
-      <Tabs />
 
-      <div>
+      <div className="bg-gray-200 mx-auto mt-10 md:w-2xl p-5 rounded-2xl">
         <div className="flex justify-between mt-3 mb-5 items-center">
           <h2 className="text-2xl">Tasks</h2>
           <button onClick={addTask} className=" bg-gray-400 py-1 px-2 rounded-sm hover:scale-105">➕ Add New Task</button>
@@ -103,35 +94,21 @@ function Home() {
             : ''
           }
           <ul className="">
-            {todos.map(todo => (
-              <li key={todo.id} className="flex justify-between items-center flex-wrap bg-gray-200 mb-3 text-lg p-2 rounded-lg">
+            {tasks.map(task => (
+              <li key={task.id} className="flex justify-between items-center flex-wrap bg-gray-200 mb-3 text-lg p-2 rounded-lg">
                 <div className="flex gap-1">
                   <input 
                     type="checkbox"
-                    checked={todo.completed}
+                    checked={task.completed}
                     onChange={() => {
-                      setTodos(prev => prev.map(t => t.id === todo.id ? {...t, completed: !t.completed} : t ))
+                     
                     }}
                   />
-                  <div style={{textDecoration: todo.completed ? 'line-through' : 'none'}} className="wrap-break-word max-w-72 md:max-w-70 pb-1">
-                    {todo.edit ? 
-                      <div>
-                        <input 
-                          value={editText} 
-                          autoFocus
-                          onChange={e => setEditText(e.target.value)}
-                          onKeyDown={e => {
-                            if (e.key === "Enter") editTask(todo.id, editText)
-                            if (e.key === "Escape") editTask(todo.id, todo.text)
-                          }}
-                          className=" border-2 py-1 px-2 rounded-md hover:scale-101 focus:border-gray-600 focus:outline-none"
-                          // onBlur={() => edit}
-                        /> 
-                      </div>
-                      : todo.text}
+                  <div style={{textDecoration: task.completed ? 'line-through' : 'none'}} className="wrap-break-word max-w-72 md:max-w-70 pb-1">
+                    {task.title}    
                   </div>
                 </div>
-                <div className="flex gap-2">
+                {/* <div className="flex gap-2">
                   <button
                     onClick={() => {
                       editTask(todo.id, editText)
@@ -142,7 +119,7 @@ function Home() {
                     onClick={() => {
                       deleteTask(todo.id)
                     }} className=" bg-red-700 py-1 px-2 rounded-sm hover:scale-105">🗑️ Delete</button>
-                </div>
+                </div> */}
                 
                 {/* {console.log(todo.edit)} */}
               </li>
@@ -150,9 +127,6 @@ function Home() {
           </ul>
         </div>
       </div>
-      
-      
-    </div>
     </>
   )
 }

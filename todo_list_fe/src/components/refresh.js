@@ -39,7 +39,7 @@ export const fetchWithAuth = async(url) => {
     })
 
     if (response.status === 401){
-      const newToken = refreshAccessToken()
+      const newToken = await refreshAccessToken()
       if(!newToken) {
         window.location.href = "/login"
         throw new Error("Not Authorized")
