@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Tabs from "./tabs"
 import Header from "./header"
+import { fetchWithAuth } from "./refresh"
 
 function Home() {
 
@@ -11,24 +12,60 @@ function Home() {
   const addTask = () => {
     setTaskInput(true)
   }
-  const createTask = () => {
-    const todo = {
-      id: Date.now(),
-      text: taskText,
-      completed: false,
-      edit: false,
+
+  const fetchTask = async() => {
+    try{
+      const response = await fetchWithAuth("http://localhost:8000/todo/task/")
+      if (!response.ok) {
+        console.log("Failed:", response.status);
+        return;
+      }
+      const tasks = await response.json()
+      console.log(tasks)
+    } catch(err) {
+      console.error(err)
     }
-    setTodos([...todos, todo])
-    setTaskText('')
-    setEditText(todo.text)
   }
-  const editTask = (id, text) => {
-    setTodos(prev => prev.map(todo => todo.id === id ? {...todo, text: text, edit: !todo.edit} : todo))
-    setEditText(text)
+
+  useEffect(() => {
+    fetchTask()
+  }, [])
+
+
+  const createTask = async() => {
+    try {
+      const response = await fetchWithAuth("http://localhost:8000/todo/task/", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: taskText,
+        }),
+      })
+      if (!response.ok) {
+        console.log("Failed:", response.status);
+        return;
+      }
+      fetchTask()
+      console.log(response)
+      // const data = await response.json();
+      // setTodos([...todos, data]);
+      // setTaskText('');
+    } catch(err) {
+      console.error(err)
+    }
   }
-  const deleteTask = (id) => {
-    setTodos(prev => prev.filter(t => t.id !== id))
-  }
+
+
+
+  // const editTask = (id, text) => {
+  //   setTodos(prev => prev.map(todo => todo.id === id ? {...todo, text: text, edit: !todo.edit} : todo))
+  //   setEditText(text)
+  // }
+  // const deleteTask = (id) => {
+  //   setTodos(prev => prev.filter(t => t.id !== id))
+  // }
 
 
   return(

@@ -6,7 +6,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsOwner
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django.contrib.auth import get_user_model
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
 # Create your views here.
 
 User = get_user_model()
@@ -34,3 +35,14 @@ class TodoRetrieveUpdateDestroyApiView(RetrieveUpdateDestroyAPIView):
   queryset = Todo.objects.all()
   serializer_class = TodoSerializer
   permission_classes = [IsAuthenticated, IsOwner]
+
+class UserProfileApiView(APIView):
+  permission_classes = [IsAuthenticated]
+
+  def get(self, request):
+    user = request.user
+    data = {
+      'username': user.username,
+      'email': user.email,
+    }
+    return Response(data)

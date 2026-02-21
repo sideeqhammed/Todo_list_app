@@ -3,13 +3,44 @@ import { useState } from "react";
 function Login () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setEmail('')
+    setPassword('')
+    setError(null)
+    try {
+      const response = await fetch('http://localhost:8000/todo/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      })
+      if (response.ok) {
+        const data = await response.json()
+        localStorage.setItem("access", data.access)
+        localStorage.setItem("refresh", data.refresh)
+        window.location.href = "/"
+      } else {
+        const errorData = await response.json()
+        setError(errorData.detail || 'Login failed')
+      }
+    }
+
+    catch (error) {
+      console.log(error)
+      setError(error.message)
+  }
+}
 
   return(
-    <div className="flex h-screen items-center justify-center">
-      <div className="w-80 h-86 bg-gray-200 m-auto py-4 px-10 rounded-2xl text-center items-center justify-center">
-        <h1 className="text-3xl mb-10 font-extrabold">Login</h1>
+    <div className="flex flex-col h-100vh items-center justify-center gap-5">
+      <div className="w-90 h-110 bg-gray-200 m-auto py-4 px-10 rounded-2xl text-center items-center justify-center">
+        <h1 className="text-3xl mt-5 mb-10 font-extrabold">Login</h1>
         <div className="flex justify-center">
-          <form>
+          <form onSubmit={handleSubmit}>
             <label for="email" className="block text-left">Email:</label>
             <input
             type="email"
@@ -18,6 +49,8 @@ function Login () {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
+            size={25}
+            required
             className="border-gray-500 border-2 py-1 px-2 rounded-md hover:scale-101 focus:border-gray-600 focus:outline-none mb-5"
             />
             <label for="password" className="block text-left">Password:</label>
@@ -28,12 +61,18 @@ function Login () {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
+            size={25}
+            required
             className="border-gray-500 border-2 py-1 px-2 rounded-md hover:scale-101 focus:border-gray-600 focus:outline-none mb-10"
             />
-            <button className=" bg-gray-400 text-xl py-2 px-4 rounded-sm hover:scale-102">Login</button>
+            <button type="submit" className=" bg-gray-400 text-xl py-2 px-4 mb-8 rounded-sm hover:scale-102">Login</button>
+            <p className="mt-4">Don't have an account? <a href="/register" className="text-blue-500 hover:underline">Register here</a></p>
           </form>
         </div>
       </div>
+      {error && 
+        <div className="w-80 h-20 bg-red-500 p-3 text-white rounded-lg">{error}</div>
+      }
     </div>
   )
 }
