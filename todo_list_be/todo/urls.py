@@ -8,6 +8,6 @@ urlpatterns = [
   path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
   path('register/', views.UserCreateApiView.as_view(), name='user_create'),
   path('task/', views.TodoListCreateApiView.as_view(), name='todo_list'),
-  path('task/<int:pk>', views.TodoRetrieveUpdateDestroyApiView.as_view(), name='todo_detail'),
+  path('task/<int:pk>/', views.TodoRetrieveUpdateDestroyApiView.as_view(), name='todo_detail'),
   path('profile/', views.UserProfileApiView.as_view(), name='user_profile'),
 ]

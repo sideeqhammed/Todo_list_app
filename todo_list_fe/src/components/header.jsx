@@ -27,8 +27,8 @@ function Header() {
 
   return(
     <div className="flex justify-between bg-gray-400 items-center mb-8">
-      <h1 className="p-5 text-4xl flex justify-center ">My ToDo List</h1>
-      <p className="p-5 text-xl text-center">Hello {username}</p>
+      <h1 className="p-5 text-2xl md:text-4xl flex justify-center ">My ToDo List</h1>
+      <p className="p-5 text-lg md:text-xl text-center">Hello {username}</p>
     </div>
   )
 }

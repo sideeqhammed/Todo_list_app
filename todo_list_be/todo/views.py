@@ -18,7 +18,7 @@ class UserCreateApiView(CreateAPIView):
 
 class TodoListCreateApiView(ListCreateAPIView):
   serializer_class = TodoSerializer
-  permission_classes = [IsAuthenticated, IsOwner]
+  permission_classes = [IsAuthenticated]
 
   def get_queryset(self):
     return Todo.objects.filter(user = self.request.user)
@@ -29,7 +29,6 @@ class TodoListCreateApiView(ListCreateAPIView):
 
   def perform_create(self, serializer):
     serializer.save(user=self.request.user)
-    return super().perform_create(serializer)
 
 class TodoRetrieveUpdateDestroyApiView(RetrieveUpdateDestroyAPIView):
   queryset = Todo.objects.all()

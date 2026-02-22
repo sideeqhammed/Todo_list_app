@@ -28,12 +28,14 @@ const refreshAccessToken = async() => {
   }
 }
   
-export const fetchWithAuth = async(url) => {
+export const fetchWithAuth = async(url, options = {}) => {
   try {
     const token = localStorage.getItem("access")
 
     let response = await fetch(url, {
+      ...options,
       headers: {
+        ...options.headers || {},
         Authorization : `Bearer ${token}`,
       }
     })
@@ -46,7 +48,9 @@ export const fetchWithAuth = async(url) => {
       }
 
       response = await fetch(url, {
+        ...options,
         headers: {
+          ...options.headers || {},
           Authorization: `Bearer ${newToken}`,
         }
       })
