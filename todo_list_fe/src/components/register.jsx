@@ -108,7 +108,7 @@ function Register () {
         ))
       }
       {success && 
-        <div className="w-80 h-20 bg-green-500 p-3 text-white rounded-lg text-center">{success}</div>
+        <div className="w-80 bg-green-500 p-3 text-white rounded-lg text-xl text-center">{success}</div>
       }
     </div>
   )

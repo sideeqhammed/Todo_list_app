@@ -20,7 +20,7 @@ function Login () {
         body: JSON.stringify({ email, password })
       })
       if (response.ok) {
-        setSuccess('Success')
+        setSuccess('Success!')
         const data = await response.json()
         localStorage.setItem("access", data.access)
         localStorage.setItem("refresh", data.refresh)
@@ -76,7 +76,7 @@ function Login () {
         <div className="w-80 h-20 bg-red-500 p-3 text-white rounded-lg text-center">{error}</div>
       }
       {success && 
-        <div className="w-80 h-20 bg-green-500 p-3 text-white rounded-lg text-center">{success}</div>
+        <div className="w-80 bg-green-500 p-3 text-white rounded-lg text-xl text-center">{success}</div>
       }
     </div>
   )
