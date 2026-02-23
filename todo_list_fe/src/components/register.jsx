@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Home from "./home";
 import { useNavigate } from "react-router-dom";
 
 function Register () {
@@ -8,6 +7,8 @@ function Register () {
   const [password1, setPassword1] = useState('')
   const [password2, setPassword2] = useState('')
   const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(null)
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -26,10 +27,11 @@ function Register () {
         body: JSON.stringify({ username, email, password1, password2 })
       })
       if (response.ok) {
+        setSuccess("Success!")
         const data = await response.json()
         localStorage.setItem("access", data.access)
         localStorage.setItem("refresh", data.refresh)
-        navigate('/Home')
+        navigate('/')
       } else {
         const errData = await response.json()
         setError(errData)
@@ -104,6 +106,9 @@ function Register () {
             {messages[0]}
           </p>
         ))
+      }
+      {success && 
+        <div className="w-80 h-20 bg-green-500 p-3 text-white rounded-lg text-center">{success}</div>
       }
     </div>
   )

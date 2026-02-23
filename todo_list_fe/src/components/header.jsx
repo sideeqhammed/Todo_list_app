@@ -1,8 +1,17 @@
 import { useState, useEffect } from "react";
 import { fetchWithAuth } from "./refresh";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [username, setUsername] = useState('')
+  const navigate = useNavigate()
+
+  const logout = () => {
+    localStorage.clear("access");
+    localStorage.clear("refresh");
+    navigate("/login")
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +37,10 @@ function Header() {
   return(
     <div className="flex justify-between bg-gray-400 items-center mb-8">
       <h1 className="p-5 text-2xl md:text-4xl flex justify-center ">My ToDo List</h1>
-      <p className="p-5 text-lg md:text-xl text-center">Hello {username}</p>
+      <div className="flex">
+      <p className="px-2 text-lg md:text-xl text-center">Hello {username}</p>
+      <p className="px-2 text-lg hover:text-blue-600 cursor-pointer" onClick={logout}>Logout</p>
+      </div>
     </div>
   )
 }

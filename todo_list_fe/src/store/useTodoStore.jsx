@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { fetchWithAuth } from "../components/refresh"
+import { Navigate } from "react-router-dom"
 
 const useTodoStore = create((set, get) => ({
   tasks: [],
@@ -9,6 +10,12 @@ const useTodoStore = create((set, get) => ({
   addTask: () => set({ taskInput: true }),
   taskText: '',
   setTaskText: (text) => set({ taskText: text }),
+  editingId: null,
+  toggleEditingId: (id) => set({ editingId: id }),
+  editText: '',
+  setEditText: (text) => set({editText: text}),
+  taskToDelete: false,
+  setTaskToDelete: (task) => set({ taskToDelete: task }),
   fetchTasks: async() => {
     try{
       const response = await fetchWithAuth("http://localhost:8000/todo/task/")
@@ -42,7 +49,7 @@ const useTodoStore = create((set, get) => ({
       console.log(data)
       if (data) {
         set((state) => ({
-          tasks: [...state.tasks, data]
+          tasks: [data, ...state.tasks]
         }))
         set({ taskText: '' })
       }
@@ -70,12 +77,53 @@ const useTodoStore = create((set, get) => ({
         console.log("Failed:", response.status);
         return;
       }
+      let toggledTask = await response.json()
+      console.log(toggledTask)
+      set((state) => ({
+        tasks: state.tasks.map(task => task.id === id ? toggledTask : task)
+      }))
+    } catch (err){
+      console.error(err)
+    }
+  },
+  editTask: (id, text) => {
+    try{
+      const { tasks, setEditText } = get()
+      const task = tasks.find(t => t.id === id)
+      if(!task) return
+
+      setEditText(text)
+
+
+    } catch (err) {
+      console.error(err)
+    }
+  },
+  updateTask: async(id, text) => {
+    try{
+      const { tasks } = get()
+      const task = tasks.find(t => t.id === id)
+      if(!task) return
+
+      const response = await fetchWithAuth(`http://localhost:8000/todo/task/${id}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: text
+        })
+      })
+      if (!response.ok) {
+        console.log("Failed:", response.status);
+        return;
+      }
       const updatedTask = await response.json()
       console.log(updatedTask)
       set((state) => ({
         tasks: state.tasks.map(task => task.id === id ? updatedTask : task)
       }))
-    } catch (err){
+    } catch (err) {
       console.error(err)
     }
   },

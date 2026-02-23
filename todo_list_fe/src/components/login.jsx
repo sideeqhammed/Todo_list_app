@@ -4,6 +4,7 @@ function Login () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -19,6 +20,7 @@ function Login () {
         body: JSON.stringify({ email, password })
       })
       if (response.ok) {
+        setSuccess('Success')
         const data = await response.json()
         localStorage.setItem("access", data.access)
         localStorage.setItem("refresh", data.refresh)
@@ -71,7 +73,10 @@ function Login () {
         </div>
       </div>
       {error && 
-        <div className="w-80 h-20 bg-red-500 p-3 text-white rounded-lg">{error}</div>
+        <div className="w-80 h-20 bg-red-500 p-3 text-white rounded-lg text-center">{error}</div>
+      }
+      {success && 
+        <div className="w-80 h-20 bg-green-500 p-3 text-white rounded-lg text-center">{success}</div>
       }
     </div>
   )

@@ -12,19 +12,16 @@ function Tabs() {
   const clickAll = () => {
     setFilter('all')
     setActive(0)
-    // navigate("/")
   }
   
   const clickPending = () => {
     setFilter('pending')
     setActive(1)
-    // navigate("/pending")
   }
 
   const clickCompleted = () => {
     setFilter('completed')
     setActive(2)
-    // navigate("/completed")
   }
 
   return(

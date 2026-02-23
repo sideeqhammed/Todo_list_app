@@ -4,17 +4,28 @@ import useTodoStore from "../store/useTodoStore"
 
 function Home() {
 
-  const tasks = useTodoStore(state => state.tasks)
-  const fetchTasks = useTodoStore(state => state.fetchTasks)
-  const createTask = useTodoStore(state => state.createTask)
-  const toggleTask = useTodoStore((state) => state.toggleTask)
-  const taskInput = useTodoStore(state => state.taskInput)
-  const addTask = useTodoStore(state => state.addTask)
-  const taskText = useTodoStore(state => state.taskText)
-  const setTaskText = useTodoStore(state => state.setTaskText)
-  const filter = useTodoStore((state) => state.filter)
-  const deleteTask = useTodoStore((state) => state.deleteTask)
+  const {
+    tasks,
+    fetchTasks,
+    createTask,
+    toggleTask,
+    taskInput,
+    addTask,
+    taskText,
+    setTaskText,
+    filter,
+    editText,
+    setEditText,
+    editingId,
+    toggleEditingId,
+    editTask,
+    updateTask,
+    taskToDelete,
+    setTaskToDelete,
+    deleteTask
+  } = useTodoStore()
 
+  
   useEffect(() => {
     fetchTasks()
   }, [])
@@ -47,10 +58,11 @@ function Home() {
           {
             taskInput ? 
             <div className="flex flex-wrap justify-center gap-3 mb-6">
-              <input 
-                type="text" 
+              <textarea 
                 name="text" 
                 value={taskText} 
+                rows={2}
+                cols={30}
                 onChange={(e) => setTaskText(e.target.value)} 
                 autoFocus 
                 onKeyDown={e => {
@@ -72,23 +84,76 @@ function Home() {
                     checked={task.completed}
                     onChange={() => toggleTask(task.id)}
                   />
-                  <div style={{textDecoration: task.completed ? 'line-through' : 'none'}} className="wrap-break-word max-w-72 md:max-w-70 pb-1">
-                    {task.title}
-                  </div>
+
+                  {editingId === task.id ? 
+                    <input
+                      type="text"
+                      value={editText}
+                      onChange={(e) => {setEditText(e.target.value); console.log(editText)}}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          updateTask(task.id, editText);
+                        } else if (e.key === "Escape") {
+                          toggleEditingId(null);
+                        }
+                      }}
+                    />
+                    :
+                    <div style={{textDecoration: task.completed ? 'line-through' : 'none'}} className="wrap-break-word max-w-72 md:max-w-70 pb-1">
+                      {task.title}
+                    </div>
+                  }
+                  
                 </div>
                 <div className="flex gap-2">
 
-                  {/* <button
+                  <button
                     onClick={() => {
-                      // editTask(todo.id, editText)
+                      if (editingId !== task.id) {
+                        editTask(task.id, task.title);
+                        toggleEditingId(task.id);
+                      } else {
+                        if (editText !== task.title) {
+                          updateTask(task.id, editText);
+                          console.log("not updated");
+                        }
+                          toggleEditingId(null);
+                      }
                     }}
                     className=" bg-gray-400 py-1 px-2 rounded-sm hover:scale-105"
-                  >{todo.edit === false ? '✏️ Edit' : '✔️ Done'}</button> */}
+                  >{editingId === task.id ? '✔️ Done' : '✏️ Edit'}</button>
 
                   <button 
                     onClick={() => {
-                      deleteTask(task.id)
+                      setTaskToDelete(true)
                     }} className=" bg-red-700 py-1 px-2 rounded-sm hover:scale-105">🗑️ Delete</button>
+
+                    {taskToDelete && (
+                        <div className="fixed inset-0 bg-gray-200/30 backdrop-blur-sm flex items-center justify-center z-20">
+                          <div className="bg-white p-4 rounded-lg">
+                            <p>Are you sure you want to delete this task?</p>
+
+                            <div className="flex justify-between mt-4">
+                              <button
+                                onClick={() => {
+                                  deleteTask(task.id);
+                                  setTaskToDelete(null);
+                                }}
+                                className="bg-red-500 text-white px-3 py-1 rounded"
+                              >
+                                Yes, Delete
+                              </button>
+
+                              <button
+                                onClick={() => setTaskToDelete(null)}
+                                className="bg-gray-300 px-3 py-1 rounded"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                 </div>
                 
                 {/* {console.log(todo.edit)} */}
