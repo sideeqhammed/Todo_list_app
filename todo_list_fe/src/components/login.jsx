@@ -5,12 +5,14 @@ function Login () {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setEmail('')
     setPassword('')
     setError(null)
+    setLoading(true)
     try {
       const response = await fetch('http://localhost:8000/todo/login/', {
         method: 'POST',
@@ -19,13 +21,16 @@ function Login () {
         },
         body: JSON.stringify({ email, password })
       })
+      setLoading(true)
       if (response.ok) {
+        setLoading(false)
         setSuccess('Success!')
         const data = await response.json()
         localStorage.setItem("access", data.access)
         localStorage.setItem("refresh", data.refresh)
         window.location.href = "/"
       } else {
+        setLoading(false)
         const errorData = await response.json()
         setError(errorData.detail || 'Login failed')
       }
@@ -38,8 +43,8 @@ function Login () {
 }
 
   return(
-    <div className="flex flex-col h-100vh items-center justify-center gap-5">
-      <div className="w-90 h-110 bg-gray-200 m-auto py-4 px-10 rounded-2xl text-center items-center justify-center">
+    <div className="flex flex-col h-screen items-center justify-center gap-5">
+      <div className="w-90 h-110 bg-gray-200 mx-auto py-4 px-10 rounded-2xl text-center">
         <h1 className="text-3xl mt-5 mb-10 font-extrabold">Login</h1>
         <div className="flex justify-center">
           <form onSubmit={handleSubmit}>
@@ -72,8 +77,11 @@ function Login () {
           </form>
         </div>
       </div>
+      {loading && 
+        <div className="w-80 bg-gray-500 p-3 text-white rounded-lg text-xl text-center">Loading...</div>
+      }
       {error && 
-        <div className="w-80 h-20 bg-red-500 p-3 text-white rounded-lg text-center">{error}</div>
+        <div className="w-80 bg-red-500 p-3 text-white rounded-lg text-xl text-center">{error}</div>
       }
       {success && 
         <div className="w-80 bg-green-500 p-3 text-white rounded-lg text-xl text-center">{success}</div>

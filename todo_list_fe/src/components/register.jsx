@@ -43,8 +43,8 @@ function Register () {
 }
 
   return(
-    <div className="flex flex-col h-100vh items-center justify-center gap-5">
-      <div className="w-90 h-115 bg-gray-200 m-auto py-4 px-10 rounded-2xl text-center items-center justify-center">
+    <div className="flex flex-col h-screen items-center justify-center gap-5">
+      <div className="w-90 h-125 bg-gray-200 mx-auto py-4 px-10 rounded-2xl text-center">
         <h1 className="text-3xl mt-3 mb-7 font-extrabold">Create Account</h1>
         <div className="flex justify-center">
           <form onSubmit={handleSubmit}>
@@ -97,18 +97,19 @@ function Register () {
             className="border-gray-500 border-2 py-1 px-2 rounded-md hover:scale-101 focus:border-gray-600 focus:outline-none mb-10"
             />
             <button type="submit" className=" bg-gray-400 text-xl py-2 px-4 rounded-sm hover:scale-102">Create Account</button>
+            <p className="mt-4">Already have an account? <a href="/login" className="text-blue-500 hover:underline">Register here</a></p>
           </form>
         </div>
       </div>
       {error &&
         Object.entries(error).map(([field, messages]) => (
-          <p key={field} className="bg-red-500 p-3 text-white rounded-lg">
+          <p key={field} className="w-90 bg-red-500 p-3 text-white rounded-lg text-xl text-center">
             {messages[0]}
           </p>
         ))
       }
       {success && 
-        <div className="w-80 bg-green-500 p-3 text-white rounded-lg text-xl text-center">{success}</div>
+        <div className="w-90 bg-green-500 p-3 text-white rounded-lg text-xl text-center">{success}</div>
       }
     </div>
   )

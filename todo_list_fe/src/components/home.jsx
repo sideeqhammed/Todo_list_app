@@ -97,6 +97,7 @@ function Home() {
                           toggleEditingId(null);
                         }
                       }}
+                      className="border-2 py-1 px-2 rounded-md hover:scale-101 focus:border-gray-600 focus:outline-none"
                     />
                     :
                     <div style={{textDecoration: task.completed ? 'line-through' : 'none'}} className="wrap-break-word max-w-72 md:max-w-70 pb-1">
