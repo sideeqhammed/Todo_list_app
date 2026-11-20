@@ -1,16 +1,21 @@
-# React + Vite
+# Todo List Frontend
+A modern and minimalistic, responsive web app built with React and Tailwind CSS, allowing users to create, update and delete their todos.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features
+- CRUD — creating, updating, and deleting tasks or todos
+- Responsive Design — optimized for both mobile and desktop with Tailwind CSS
+- Clean UI — minimalist and visually appealing design with hover effects and smooth transitions
 
-Currently, two official plugins are available:
+## Installation and Setup
+- Clone the Repository
+- Change directory to the frontend (cd todo_list_fe)
+- Install Dependencies with npm install
+- Run the Development Server with npm run dev
+  
+Your app should now be live at: 👉 http://localhost:5173
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Key concepts
+- State Management: Component-level state handled via React’s useState.
+- Dynamic Routing: Book and author pages use React Router’s useParams() to fetch data dynamically based on the URL.
+- Conditional Rendering: Handles loading, error, and data states gracefully.
+- Responsive Grid Layouts: Tailwind’s grid and flex utilities create consistent layouts across screen sizes.
