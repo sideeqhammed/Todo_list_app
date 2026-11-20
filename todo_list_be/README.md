@@ -12,7 +12,7 @@ A Todo List API built with Django REST Framework (DRF) and MySQL, containerized 
     - Todos can be filtered using search words.
     - Todos can also be filtered with completion states.
  
-  ## Installation
+ ## Installation
   ### Using docker
   - Git clone the repository
   - Change directory into the backend (cd todo_list_be)
